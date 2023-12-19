@@ -11,17 +11,19 @@ class CustomMoviesCard extends ConsumerWidget {
 
     return Container(
         color: const Color.fromARGB(255, 41, 40, 40),
-        height: 400,
+height: 400,
         child: Row(children: [
           Container(
               height: 400,
               width: 100,
-              color: Colors.red,
-              child:  Image.asset("assets/images/medium-cover.jpg") 
-),
+decoration: BoxDecoration(
+    color: Colors.red,
+    borderRadius: BorderRadius.circular(10.0), 
+  ),              child:loadImageFromNetwork('https://www.yts.nz/${movies.largeCoverImage}')) ,
           Padding(
             padding: const EdgeInsets.only(top: 15, left: 5),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   width: 120,
@@ -47,14 +49,21 @@ class CustomMoviesCard extends ConsumerWidget {
                         overflow: TextOverflow.visible,
                         style: const TextStyle(color: Colors.white),
                       ),
+                      
                       const SizedBox(
-                        width: 10,
+
+                        width: 70,
                       ),
-                      Text(
-                        movies.genres!.join(', '),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.blue,
+                      SizedBox(
+                                          width: 120,
+
+
+                        child: Text(
+                          movies.genres!.join(', '),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.blue,
+                          ),
                         ),
                       )
                     ],
@@ -66,12 +75,16 @@ class CustomMoviesCard extends ConsumerWidget {
         ]));
   }
 }
-Widget loadImageFromNetwork(movies) {
 
+Widget loadImageFromNetwork(String imageUrl) {
+ 
   try {
-    return  Image.network("https://www.yts.nz/${movies}" , scale: 1.0) ; 
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Image.network(imageUrl, scale: 1.0),
+    );
   } catch (e) {
     print("Error loading image: $e");
-    return Image.asset("assets/images/medium-cover.jpg"); 
-  }
-}
+    return Image.asset("assets/images/medium-cover.jpg");
+  }}
+

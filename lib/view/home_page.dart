@@ -33,16 +33,22 @@ class HomePage extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-dynamic id = movies[index].id ; 
-dynamic detalies = movies[index].summary ; 
-dynamic image = movies[index].largeCoverImage ; 
-dynamic quality1  = movies[index].torrents![0].quality; 
-dynamic url1  = movies[index].torrents![0].url; 
-dynamic url2  = movies[index].torrents![1].url; 
-dynamic quality2  = movies[index].torrents![1].quality; 
-                      // context.go('/detalies/$id'); 
-  context.goNamed('detalies',queryParameters: {"id" : id.toString() , "detalies" : detalies , 'image' : image , 'quality1': quality1  ,"quality2" : quality2 , 'url1':url1 , 'url2':url2});
-                        
+                        dynamic id = movies[index].id;
+                        dynamic detalies = movies[index].summary;
+                        dynamic image = movies[index].largeCoverImage;
+                        dynamic quality1 = movies[index].torrents![0].quality;
+                        dynamic url1 = movies[index].torrents![0].url;
+                        dynamic url2 = movies[index].torrents![1].url;
+                        dynamic quality2 = movies[index].torrents![1].quality;
+                        context.goNamed('detalies', queryParameters: {
+                          "id": id.toString(),
+                          "detalies": detalies,
+                          'image': image,
+                          'quality1': quality1,
+                          "quality2": quality2,
+                          'url1': url1,
+                          'url2': url2,
+                        });
                       },
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
