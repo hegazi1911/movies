@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:movies/view/search.dart';
-import 'package:movies/widget/custom_movies_card.dart';
 import 'package:movies/services/Api/get_all_movies.dart';
 import 'package:movies/services/Model/movies_list_model.dart';
+import 'package:movies/widget/custom_movies_card.dart';
 
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+class SearchMovies extends SearchDelegate{
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(onPressed: (){ query ="" ; }, icon: const Icon(Icons.close))
+    ] ;
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("MoOov"),actions: [IconButton(onPressed: (){
-          showSearch(context: context, delegate: SearchMovies());
-        }, icon: Icon(Icons.search))],
-      ),
-      backgroundColor: Colors.black,
-      body: FutureBuilder<List<Movies>>(
-          future: getAllMovies(),
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(onPressed: (){
+      Navigator.pop(context) ; 
+    }, icon: Icon(Icons.arrow_back_ios)) ; 
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    print(query);
+        return FutureBuilder<List<Movies>>(
+          future: getAllMovies(query: query),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -68,7 +72,12 @@ class HomePage extends ConsumerWidget {
               return Text(
                   'No data available'); // Handle the case when the future completes, but there's no data.
             }
-          }),
-    );
+          });
   }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Center(child: Text('Search Users '),) ; 
+  }
+
 }

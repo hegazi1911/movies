@@ -19,7 +19,7 @@ height: 400,
 decoration: BoxDecoration(
     color: Colors.red,
     borderRadius: BorderRadius.circular(10.0), 
-  ),              child:loadImageFromNetwork('https://www.yts.nz/${movies.largeCoverImage}')) ,
+  ),              child:loadImageFromNetwork(movies.mediumCoverImage)) ,
           Padding(
             padding: const EdgeInsets.only(top: 15, left: 5),
             child: Column(
@@ -49,13 +49,12 @@ decoration: BoxDecoration(
                         overflow: TextOverflow.visible,
                         style: const TextStyle(color: Colors.white),
                       ),
-                      
-                      const SizedBox(
-
-                        width: 70,
-                      ),
                       SizedBox(
-                                          width: 120,
+                        width: 100,
+                      ) , 
+                     
+                      SizedBox(
+                                          width: 100,
 
 
                         child: Text(
@@ -76,15 +75,31 @@ decoration: BoxDecoration(
   }
 }
 
-Widget loadImageFromNetwork(String imageUrl) {
+// Widget loadImageFromNetwork(String imageUrl) {
  
-  try {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.network(imageUrl, scale: 1.0),
-    );
-  } catch (e) {
-    print("Error loading image: $e");
+//   try {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Image.network(imageUrl, scale: 1.0),
+//     );
+//   } catch (e) {
+//     print("Error loading image: $e");
+//     return Image.asset("assets/images/medium-cover.jpg");
+//   }}
+Widget loadImageFromNetwork(String? imageUrl) {
+  if (imageUrl == null) {
     return Image.asset("assets/images/medium-cover.jpg");
-  }}
+  }
 
+  final completeUrl = 'https://www.yts.nz$imageUrl';
+
+  return Image.network(
+    completeUrl,
+    scale: 1.0,
+    // This is how you handle images that fail to load
+    errorBuilder: (context, error, stackTrace) {
+      // Replace this with a placeholder image asset
+      return Image.asset("assets/images/medium-cover.jpg");
+    },
+  );
+}

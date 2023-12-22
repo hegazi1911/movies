@@ -14,6 +14,7 @@ class Api {
     http.Response response = await http.get(Uri.parse(url), headers: headrs);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+
     } else {
       throw Exception("there is a proplem whith status code ${response.body}");
     }}catch (e) {
