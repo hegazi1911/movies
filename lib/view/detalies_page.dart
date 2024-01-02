@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:movies/services/Api/get_all_movies.dart';
 import 'package:movies/services/Api/get_detalies.dart';
 import 'package:movies/services/Model/details_movies_model.dart';
 import 'package:movies/services/Model/movies_list_model.dart';

@@ -1,38 +1,24 @@
+    import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movies/services/Api/get_all_movies.dart';
 import 'package:movies/services/Api/get_movies.dart';
 import 'package:movies/services/Model/movies_list_model.dart';
 import 'package:movies/widget/custom_movies_card.dart';
 
-class SearchMovies extends SearchDelegate{
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(onPressed: (){ query ="" ; }, icon: const Icon(Icons.close))
-    ] ;
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(onPressed: (){
-      Navigator.pop(context) ; 
-    }, icon: Icon(Icons.arrow_back_ios)) ; 
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    print(query);
-        return FutureBuilder<List<Movies>>(
-          future: getAllMovies(query: query),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final data = snapshot.data;
-              List<Movies> movies = snapshot.data!;
-              return GridView.builder(
+FutureBuilder<List<Movies>> allMovies(int? PageNumber) {
+    return FutureBuilder<List<Movies>>(
+      
+        future: getAllMovies(pagenum: PageNumber),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.hasData) {
+            final data = snapshot.data;
+            List<Movies> movies = snapshot.data!;
+            return GridView.builder(
                   itemCount: movies.length,
                   clipBehavior: Clip.none,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -68,16 +54,9 @@ class SearchMovies extends SearchDelegate{
                           )),
                     );
                   });
-            } else {
-              return Text(
-                  'No data available'); // Handle the case when the future completes, but there's no data.
-            }
-          });
+          } else {
+            return Text(
+                'No data available'); // Handle the case when the future completes, but there's no data.
+          }
+        });
   }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Center(child: Text('Search Users '),) ; 
-  }
-
-}

@@ -10,68 +10,96 @@ class CustomMoviesCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     return Container(
-        color: const Color.fromARGB(255, 41, 40, 40),
-height: 400,
-        child: Row(children: [
-          Container(
-              height: 400,
-              width: 100,
-decoration: BoxDecoration(
-    color: Colors.red,
-    borderRadius: BorderRadius.circular(10.0), 
-  ),              child:loadImageFromNetwork(movies.mediumCoverImage)) ,
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: Text(
-                    movies.title!,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 90),
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Rate :",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        movies.rating.toString(),
-                        overflow: TextOverflow.visible,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      SizedBox(
-                        width: 100,
-                      ) , 
-                     
-                      SizedBox(
-                                          width: 100,
-
-
-                        child: Text(
-                          movies.genres!.join(', '),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
+      decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage('https://www.yts.nz${movies.mediumCoverImage!}'),
+                              fit: BoxFit.contain,
+                            ),
                           ),
+      child:   Column(
+        children: [
+          SizedBox(
+                      width: 120,
+                      child: Center(
+                        child: Text(
+                          movies.title!,
+                          overflow: TextOverflow.ellipsis,
+                          style:  TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        ]));
+                      ),
+                    ),
+SizedBox(height: 50,)
+
+
+        ],
+      ),
+    );
+// Container(
+//         color: const Color.fromARGB(255, 41, 40, 40),
+// height: 400,
+//         child: Row(children: [
+//           Container(
+//               height: 400,
+//               width: 100,
+// decoration: BoxDecoration(
+//     color: Colors.red,
+//     borderRadius: BorderRadius.circular(10.0), 
+//   ),              child:loadImageFromNetwork(movies.mediumCoverImage)) ,
+//           Padding(
+//             padding: const EdgeInsets.only(top: 15, left: 5),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 SizedBox(
+//                   width: 120,
+//                   child: Text(
+//                     movies.title!,
+//                     overflow: TextOverflow.ellipsis,
+//                     style: const TextStyle(
+//                         fontSize: 18,
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.white),
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.only(top: 90),
+//                   child: Row(
+//                     children: [
+//                       const Text(
+//                         "Rate :",
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                       Text(
+//                         movies.rating.toString(),
+//                         overflow: TextOverflow.visible,
+//                         style: const TextStyle(color: Colors.white),
+//                       ),
+//                       SizedBox(
+//                         width: 100,
+//                       ) , 
+                     
+//                       SizedBox(
+//                                           width: 100,
+
+
+//                         child: Text(
+//                           movies.genres!.join(', '),
+//                           style: const TextStyle(
+//                             fontSize: 12,
+//                             color: Colors.blue,
+//                           ),
+//                         ),
+//                       )
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           )
+//         ]));
   }
 }
 
@@ -99,7 +127,7 @@ Widget loadImageFromNetwork(String? imageUrl) {
     // This is how you handle images that fail to load
     errorBuilder: (context, error, stackTrace) {
       // Replace this with a placeholder image asset
-      return Image.asset("assets/images/medium-cover.jpg");
+      return Image.asset(completeUrl);
     },
   );
 }

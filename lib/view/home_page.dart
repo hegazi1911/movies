@@ -1,74 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:movies/services/Riverpod/change_page.dart';
 import 'package:movies/view/search.dart';
-import 'package:movies/widget/custom_movies_card.dart';
-import 'package:movies/services/Api/get_all_movies.dart';
-import 'package:movies/services/Model/movies_list_model.dart';
+import 'package:movies/widget/all_Movies.dart';
+import 'package:movies/widget/custom_sugest_card.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final PageNum = ref.watch(PageNumber);
+    print('PageNum ${PageNum.pagenum}');
     return Scaffold(
       appBar: AppBar(
-        title: Text("MoOov"),actions: [IconButton(onPressed: (){
-          showSearch(context: context, delegate: SearchMovies());
-        }, icon: Icon(Icons.search))],
+        backgroundColor: Colors.black,
+        title: Center(child: Text("MoOov" , style: TextStyle(color: Colors.red),)),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: SearchMovies());
+              },
+              icon: Icon(Icons.search))
+        ],
       ),
       backgroundColor: Colors.black,
-      body: FutureBuilder<List<Movies>>(
-          future: getAllMovies(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final data = snapshot.data;
-              List<Movies> movies = snapshot.data!;
-              return GridView.builder(
-                  itemCount: movies.length,
-                  clipBehavior: Clip.none,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      childAspectRatio: 2,
-                      crossAxisSpacing: .5,
-                      mainAxisSpacing: 1.5),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        dynamic id = movies[index].id;
-                        dynamic detalies = movies[index].summary;
-                        dynamic image = movies[index].largeCoverImage;
-                        dynamic quality1 = movies[index].torrents![0].quality;
-                        dynamic url1 = movies[index].torrents![0].url;
-                        dynamic url2 = movies[index].torrents![1].url;
-                        dynamic quality2 = movies[index].torrents![1].quality;
-                        context.goNamed('detalies', queryParameters: {
-                          "id": id.toString(),
-                          "detalies": detalies,
-                          'image': image,
-                          'quality1': quality1,
-                          "quality2": quality2,
-                          'url1': url1,
-                          'url2': url2,
-                        });
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 24),
-                          child: CustomMoviesCard(
-                            movies: movies[index],
-                          )),
-                    );
-                  });
-            } else {
-              return Text(
-                  'No data available'); // Handle the case when the future completes, but there's no data.
-            }
-          }),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 10),
+            child: const Text(
+              'Sugest Movies',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),
+          ),
+          customsugeestcard(),
+          Expanded(child: allMovies(PageNum.pagenum)),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  PageNum.decrease();
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      "Back",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 300,
+              ),
+              GestureDetector(
+                onTap: () {
+                  PageNum.increase();
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      "Next",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Icon(
+                      Icons.navigate_next,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }
